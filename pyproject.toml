@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "voice-forge"
+version = "0.1.0"
+description = ""
+authors = ["Ivan Zatevakhin"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+piper-tts = {version="^1.2.0", optional=true}
+
+[tool.poetry.extras]
+piper = ["piper-tts"]
+
+
+[tool.poetry.dev-dependencies]
+ruff = "^0.1.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Set the maximum line length to 120.
+line-length = 120
+
