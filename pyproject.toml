@@ -1,20 +1,23 @@
 [tool.poetry]
 name = "voice-forge"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Ivan Zatevakhin"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-piper-tts = {version="^1.2.0", optional=true}
+piper-tts = { version="^1.2.0" }
+huggingface-hub = { version="^0.23.0" }
+httpx = { version="^0.27.0" }
+numpy = { version="^1.26.4" }
 
 [tool.poetry.extras]
 piper = ["piper-tts"]
 
 
 [tool.poetry.dev-dependencies]
-ruff = "^0.1.6"
+ruff = "^0.4.3"
 
 [build-system]
 requires = ["poetry-core"]
