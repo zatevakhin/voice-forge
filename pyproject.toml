@@ -7,13 +7,15 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-piper-tts = { version="^1.2.0" }
+piper-tts = { version="^1.2.0", optional=true }
 huggingface-hub = { version="^0.23.0" }
 httpx = { version="^0.27.0" }
 numpy = { version="^1.26.4" }
+sounddevice = { version="^0.4.7", optional=true }
 
 [tool.poetry.extras]
 piper = ["piper-tts"]
+examples = ["sounddevice"]
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.0"
