@@ -143,7 +143,7 @@ jobs:
         uses: actions/cache@v3
         id: cache
         with:
-          path: .venv
+          path: ~/.cache/pypoetry/virtualenvs
           key: venv-${{ hashFiles('poetry.lock') }}
 
       - name: Python Semantic Release
@@ -155,6 +155,12 @@ jobs:
           tag: ${{ steps.semantic-release.outputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prerelease: false
+
+      - name: Build release package
+        if: steps.release.outputs.released == 'true'
+        run: |
+          export PATH="${HOME}/.local/bin:${PATH}"
+          poetry build
 
       - name: Publish package distributions to GitHub Releases
         if: steps.release.outputs.released == 'true'
