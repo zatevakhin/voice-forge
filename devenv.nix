@@ -5,7 +5,7 @@
   env.PYTHONPATH = ".";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git pkgs.zsh ];
+  packages = [ pkgs.git pkgs.zsh pkgs.portaudio ];
 
   # https://devenv.sh/scripts/
   # scripts.hello.exec = "";
