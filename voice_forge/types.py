@@ -1,6 +1,7 @@
-from typing import Dict, List, Any, Tuple
-from pydantic import BaseModel
 from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+from pydantic import BaseModel
 
 
 class Language(BaseModel):

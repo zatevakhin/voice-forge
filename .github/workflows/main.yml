@@ -1,0 +1,165 @@
+---
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+env:
+  X_SOURCE_DIR: voice_forge/
+  X_POETRY_VERSION: 1.8.3
+  X_POETRY_INSTALL_CACHE_KEY: poetry-0
+
+jobs:
+  setup:
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ "ubuntu-latest" ]
+        python-version: [ "3.9" ]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: ${{ env.X_POETRY_INSTALL_CACHE_KEY }}
+
+      - name: Install and configure Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.X_POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load Cached Poetry Virtualenvs
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          export PATH="${HOME}/.local/bin:${PATH}"
+          poetry install --no-root --only dev
+
+  test:
+    needs: setup
+    strategy:
+      fail-fast: true
+      matrix:
+        os: [ "ubuntu-latest" ]
+        python-version: [ "3.9" ]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: ${{ env.X_POETRY_INSTALL_CACHE_KEY }}
+
+      - name: Install and configure Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.X_POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load Cached Poetry Virtualenvs
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Run code style check
+        run: |
+          export PATH="${HOME}/.local/bin:${PATH}"
+          poetry run ruff format --check ${{ env.X_SOURCE_DIR }}
+
+      - name: Run code lint
+        run: |
+          export PATH="${HOME}/.local/bin:${PATH}"
+          poetry run ruff check ${{ env.X_SOURCE_DIR }}
+
+      - name: Build project
+        run: |
+          export PATH="${HOME}/.local/bin:${PATH}"
+          poetry build
+
+  release:
+    runs-on: ubuntu-latest
+    needs: [setup, test]
+    permissions:
+      id-token: write
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Load cached Poetry installation
+        id: cached-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local
+          key: ${{ env.X_POETRY_INSTALL_CACHE_KEY }}
+
+      - name: Install and configure Poetry
+        if: steps.cached-poetry.outputs.cache-hit != 'true'
+        uses: snok/install-poetry@v1
+        with:
+          version: ${{ env.X_POETRY_VERSION }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      - name: Load Cached Poetry Virtualenvs
+        uses: actions/cache@v3
+        id: cache
+        with:
+          path: .venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: Python Semantic Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@master
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag: ${{ steps.semantic-release.outputs.version }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: false
+
+      - name: Publish package distributions to GitHub Releases
+        if: steps.release.outputs.released == 'true'
+        uses: python-semantic-release/upload-to-gh-release@main
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.release.outputs.tag }}
+

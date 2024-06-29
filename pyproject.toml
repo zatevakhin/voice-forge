@@ -15,9 +15,9 @@ numpy = { version="^1.26.4" }
 [tool.poetry.extras]
 piper = ["piper-tts"]
 
-
-[tool.poetry.dev-dependencies]
-ruff = "^0.4.3"
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.0"
+python-semantic-release = "^9.8.3"
 
 [build-system]
 requires = ["poetry-core"]
@@ -26,4 +26,34 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 # Set the maximum line length to 120.
 line-length = 120
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    # "SIM", # nope
+    # isort
+    "I",
+]
+
+[tool.semantic_release]
+version_variables = [
+    "pyproject.toml:version"
+]
+branch = "main"
+commit_parser = "angular"
+
+[tool.semantic_release.remote]
+type = "github"
+token = { env = "GH_TOKEN" }
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = true
 

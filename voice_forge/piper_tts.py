@@ -1,22 +1,21 @@
+import json
+import logging
 import operator as op
+import os
 from functools import reduce
 from pathlib import Path
 from typing import Tuple
-import json
-import os
 
-import numpy as np
-import logging
 import httpx
-
+import numpy as np
 from huggingface_hub import hf_hub_download
 
 from voice_forge.config import (
-    PIPER_VOICES_MAP_URL,
-    PIPER_VOICES_VERSION,
-    PIPER_VOICES_REPO_ID,
     PIPER_VOICES_JSON,
+    PIPER_VOICES_MAP_URL,
     PIPER_VOICES_MODELS_DIR_GITIGNORE,
+    PIPER_VOICES_REPO_ID,
+    PIPER_VOICES_VERSION,
 )
 from voice_forge.types import SpeakerData
 
@@ -47,7 +46,7 @@ class PiperTts:
             with open(voices_json, "w") as f:
                 json.dump(voices_map, f, indent=2)
         else:
-            with open(voices_json, "r") as f:
+            with open(voices_json) as f:
                 voices_map = json.load(f)
 
         if model_name not in voices_map:
