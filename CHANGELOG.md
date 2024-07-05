@@ -1,5 +1,24 @@
 # CHANGELOG
 
+## v0.1.3 (2024-07-05)
+
+### Chore
+
+* chore: Added `portaudio` as deps in devenv. ([`80f47ad`](https://github.com/zatevakhin/voice-forge/commit/80f47ad306af042072dc2e8fcfa51c58416422c6))
+
+### Ci
+
+* ci: Small fixed and caching optimizations ([`d6fe84f`](https://github.com/zatevakhin/voice-forge/commit/d6fe84ffcfa757a98f24026200c43482d0ececf0))
+
+* ci: Fixed pipeline, release `dist/*` contents ([`fae7b39`](https://github.com/zatevakhin/voice-forge/commit/fae7b39a6b0c83840a01beac0e209efaa214fbe2))
+
+### Fix
+
+* fix: Pinned onnxruntime due to issues in new versions.
+
+ - https://github.com/rhasspy/piper/issues/520
+ - https://github.com/microsoft/onnxruntime/issues/20877 ([`bf7d806`](https://github.com/zatevakhin/voice-forge/commit/bf7d8066f6cb5f4501ab31d29c51ccaead487867))
+
 ## v0.1.2 (2024-06-29)
 
 ### Chore
