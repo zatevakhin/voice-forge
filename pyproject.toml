@@ -12,6 +12,10 @@ huggingface-hub = { version="^0.23.0" }
 httpx = { version="^0.27.0" }
 numpy = { version="^1.26.4" }
 sounddevice = { version="^0.4.7", optional=true }
+# Pinnded due to issues with piper models.
+# - https://github.com/rhasspy/piper/issues/520
+# - https://github.com/microsoft/onnxruntime/issues/20877
+onnxruntime = {version = ">=1.16.3,<1.18.0"}
 
 [tool.poetry.extras]
 piper = ["piper-tts"]
