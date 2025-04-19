@@ -18,7 +18,7 @@
   # https://devenv.sh/languages/
   languages.python = {
     enable = true;
-    version = "3.9";
+    version = "3.10";
 
     poetry = {
       enable = true;

@@ -6,7 +6,7 @@ authors = ["Ivan Zatevakhin"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 piper-tts = { version="^1.2.0", optional=true }
 huggingface-hub = { version="^0.23.0" }
 httpx = { version="^0.27.0" }
@@ -15,7 +15,7 @@ sounddevice = { version="^0.4.7", optional=true }
 # Pinnded due to issues with piper models.
 # - https://github.com/rhasspy/piper/issues/520
 # - https://github.com/microsoft/onnxruntime/issues/20877
-onnxruntime = {version = ">=1.16.3,<1.18.0"}
+onnxruntime = {version = ">=1.16.3"}
 
 [tool.poetry.extras]
 piper = ["piper-tts"]
